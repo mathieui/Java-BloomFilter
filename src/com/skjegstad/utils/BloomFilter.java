@@ -318,7 +318,7 @@ public class BloomFilter<E> implements Serializable {
         for (E element : c)
             add(element);
     }
-        
+
     /**
      * Returns true if the element could have been inserted into the Bloom filter.
      * Use getFalsePositiveProbability() to calculate the probability of this
@@ -437,5 +437,51 @@ public class BloomFilter<E> implements Serializable {
      */
     public double getBitsPerElement() {
         return this.bitSetSize / (double)numberOfAddedElements;
+    }
+
+    /**
+     * Approximate the size of the Bloom filter
+     *
+     * @return the approximate number of elements in that Bloom filter
+     */
+    public int approxCount() {
+        double N = this.expectedNumberOfFilterElements * this.bitsPerElement;
+        System.out.println("toto: "+(-N * Math.log(1 - ((double)this.bitset.cardinality()/N))/k));
+        return (int) (-N * Math.log(1 - ((double)this.bitset.cardinality()/N))/k);
+    }
+
+    /**
+     * Performs the Union of two bloom filters
+     *
+     * @param bf A compatible Bloom filter.
+     */
+    public void union(BloomFilter bf) {
+        this.bitset.or(bf.bitset);
+        this.numberOfAddedElements += bf.numberOfAddedElements;
+    }
+
+    /**
+     * Approximate the size of the intersection of two bloom filters
+     *
+     * @return The approximage cardinality of the intersection of the two bloom filters
+     */
+    public int approxInterSize(BloomFilter bf) {
+        return (int) (this.approxCount() + bf.approxCount() + approxUnionSize(bf));
+    }
+
+    /**
+     * Approximate the size of the union between several bloom filters
+     *
+     * @return The approximate cardinality of the union of those bloom filters
+     */
+    public int approxUnionSize(BloomFilter ... blooms) {
+        BitSet newBitset = (BitSet) this.bitset.clone();
+        double N = this.expectedNumberOfFilterElements * this.bitsPerElement;
+
+        for (BloomFilter bf: blooms) {
+            newBitset.or(bf.bitset);
+        }
+
+        return (int) (- N * Math.log(1 - ((double)newBitset.cardinality()/N))/k);
     }
 }

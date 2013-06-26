@@ -483,5 +483,73 @@ public class BloomFilterTest {
         assertEquals(expResult, result);
     }
 
+    /**
+     * Test of approxCount method, of class BloomFilter.
+     */
+    @Test
+    public void testApproxCount() {
+        System.out.println("approxCount");
+        int expResult = 100;
+
+        BloomFilter instance = new BloomFilter(0.01, expResult);
+        for (int i = 0; i < expResult; i++) {
+            instance.add(i);
+        }
+        int result = instance.approxCount();
+        assertEquals(expResult, result, expResult/100);
+
+        expResult = 1000;
+
+        instance = new BloomFilter(0.001, expResult);
+        for (int i = 0; i < expResult; i++) {
+            instance.add(i);
+        }
+        result = instance.approxCount();
+        assertEquals(expResult, result, expResult/100);
+
+        expResult = 10000;
+
+        instance = new BloomFilter(0.0001, expResult);
+        for (int i = 0; i < expResult; i++) {
+            instance.add(i);
+        }
+        result = instance.approxCount();
+        assertEquals(expResult, result, expResult/100);
+    }
+
+    /**
+     * Test of approxCount method, of class BloomFilter.
+     */
+    @Test
+    public void testApproxCount() {
+        System.out.println("approxCount");
+        int expResult = 100;
+
+        BloomFilter instance = new BloomFilter(0.01, expResult);
+        for (int i = 0; i < expResult; i++) {
+            instance.add(i);
+        }
+        int result = instance.approxCount();
+        assertEquals(expResult, result, expResult/100);
+
+        expResult = 1000;
+
+        instance = new BloomFilter(0.001, expResult);
+        for (int i = 0; i < expResult; i++) {
+            instance.add(i);
+        }
+        result = instance.approxCount();
+        assertEquals(expResult, result, expResult/100);
+
+        expResult = 10000;
+
+        instance = new BloomFilter(0.0001, expResult);
+        for (int i = 0; i < expResult; i++) {
+            instance.add(i);
+        }
+        result = instance.approxCount();
+        assertEquals(expResult, result, expResult/100);
+    }
+
 
 }
