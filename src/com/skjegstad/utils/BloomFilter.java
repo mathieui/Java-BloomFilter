@@ -184,6 +184,36 @@ public class BloomFilter<E> implements Serializable {
     }
 
     /**
+     * Compares the properties of two instances to see if they are compatible.
+     *
+     * If they are compatible, the ensemblist operations work on them.
+     *
+     * @param obj is the object to compare to.
+     * @return True if the contents of the objects are compatible.
+     */
+    @Override
+    public boolean isCompatible(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BloomFilter<E> other = (BloomFilter<E>) obj;
+        if (this.expectedNumberOfFilterElements != other.expectedNumberOfFilterElements) {
+            return false;
+        }
+        if (this.k != other.k) {
+            return false;
+        }
+        if (this.bitSetSize != other.bitSetSize) {
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
      * Compares the contents of two instances to see if they are equal.
      *
      * @param obj is the object to compare to.
@@ -446,7 +476,6 @@ public class BloomFilter<E> implements Serializable {
      */
     public int approxCount() {
         double N = this.expectedNumberOfFilterElements * this.bitsPerElement;
-        System.out.println("toto: "+(-N * Math.log(1 - ((double)this.bitset.cardinality()/N))/k));
         return (int) (-N * Math.log(1 - ((double)this.bitset.cardinality()/N))/k);
     }
 
