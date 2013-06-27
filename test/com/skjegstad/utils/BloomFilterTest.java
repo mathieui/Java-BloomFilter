@@ -518,38 +518,39 @@ public class BloomFilterTest {
     }
 
     /**
-     * Test of approxCount method, of class BloomFilter.
+     * Test of isCompatible method, of class BloomFilter.
      */
     @Test
-    public void testApproxCount() {
-        System.out.println("approxCount");
+    public void testIsCompatible() {
+        System.out.println("isCompatible");
+
         int expResult = 100;
 
-        BloomFilter instance = new BloomFilter(0.01, expResult);
-        for (int i = 0; i < expResult; i++) {
-            instance.add(i);
-        }
-        int result = instance.approxCount();
-        assertEquals(expResult, result, expResult/100);
+        BloomFilter instance1 = new BloomFilter(0.01, expResult);
+        BloomFilter instance2 = new BloomFilter(0.01, expResult);
 
-        expResult = 1000;
-
-        instance = new BloomFilter(0.001, expResult);
-        for (int i = 0; i < expResult; i++) {
-            instance.add(i);
-        }
-        result = instance.approxCount();
-        assertEquals(expResult, result, expResult/100);
+        assertEquals(instance1.isCompatible(instance2), true);
 
         expResult = 10000;
 
-        instance = new BloomFilter(0.0001, expResult);
-        for (int i = 0; i < expResult; i++) {
-            instance.add(i);
-        }
-        result = instance.approxCount();
-        assertEquals(expResult, result, expResult/100);
-    }
+        instance1 = new BloomFilter(0.0001, expResult);
+        instance2 = new BloomFilter(0.0001, expResult);
 
+        assertEquals(instance1.isCompatible(instance2), true);
+
+        expResult = 1000;
+
+        instance1 = new BloomFilter(0.0001, expResult);
+        instance2 = new BloomFilter(0.0003, expResult);
+
+        assertEquals(instance1.isCompatible(instance2), false);
+
+        expResult = 10000;
+
+        instance1 = new BloomFilter(0.001, expResult);
+        instance2 = new BloomFilter(0.001, 10);
+
+        assertEquals(instance1.isCompatible(instance2), false);
+    }
 
 }

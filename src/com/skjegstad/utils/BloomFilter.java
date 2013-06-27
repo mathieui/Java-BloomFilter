@@ -191,7 +191,6 @@ public class BloomFilter<E> implements Serializable {
      * @param obj is the object to compare to.
      * @return True if the contents of the objects are compatible.
      */
-    @Override
     public boolean isCompatible(Object obj) {
         if (obj == null) {
             return false;
